@@ -1,0 +1,72 @@
+* R-type:
+Fetch instruction: Mem[PC] -> Instruction
+Fetch operands: data1->Rs1, data2->Rs2
+Execute operation: fun(data1,data2) -> ALU_result
+Write ALU result: ALU_result->reg(Rd)
+Next PC address: PC=PC+1
+
+
+
+* I-type:(ADDI, ANDI)
+Fetch instruction: Mem[PC] -> Instruction
+Fetch opearnds: data1->Rs1, data2->Imm16
+Fetch (Extended): if (ADDI) immd(16) -> signed_Extended(immd 16)
+Execute operation: op(data1, data2) -> ALU_result.
+write ALU_result: ALU_result -> reg(Rd)
+Next PC address: PC=PC+1
+
+
+* I-type:(LW, LW.POI)
+Fetch instrcution: Mem[PC] -> Instruction
+Fetch register: Reg(Rs1) -> base
+Calculate address: base + sign_extended(Imm16) -> address
+Read memory: MEM[address] -> data
+Write register Rt: data -> Reg(Rd) 
+		   if (LW.POI) Reg(Rs1) + 1 -> Reg (Rs1)  
+Next PC address: PC=PC+1
+
+
+NOTE:Reg(Rs1) + 1 -> Reg (Rs1) 
+
+			
+
+* I-type:(SW)
+Fetch instruction: Mem[PC] -> Instruction
+Fetch register: Reg(Rs1) -> base, Reg(Rd) -> data
+Calculate address: base + sign_extended(Imm16) -> address
+Write memory: data -> Mem[address]
+Next PC address: PC = PC + 1
+
+
+
+* I_type:(BEQ, BNQ, BGT, BLT)
+Fetch instruction: Mem[PC] -> Instruction
+Fetch operands: Reg(Rs1) -> data1, Reg(Rd) -> data2
+Result: Subtract (data1,data2) - > ZERO
+Branch: if (zero):  PC + sign_ext(offset16) -> PC
+	else : PC + 1 -> PC
+
+
+
+* J_type: (JMP, CALL, RET)
+Fetch instruction: Mem[PC] -> Instruction
+Target PC address: if (JUMP || CALL) : PC[31:26] || address26 -> Target
+		   else: TOP OF STACK -> Target	   
+Jump:Target -> PC
+Push on stack: if(CALL) : PC + 1 -> TOP OF STACK 
+
+
+
+*S_type: (PUSH):
+Fetch instruction: Mem[PC] -> Instruction
+Decrement SP: SP - 1 -> SP
+Update stack: Reg (Rd) -> Top of stack.
+
+			
+
+*S_type: (POP):
+Fetch instruction: Mem[PC] -> Instruction
+Update stack: Top of stack - > Reg (Rd)
+Increamnet SP: SP + 1 -> SP
+
+
